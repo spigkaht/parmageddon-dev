@@ -92,9 +92,6 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    bootstrap (5.3.3)
-      autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 2.11.8, < 3)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -171,7 +168,6 @@ GEM
     nokogiri (1.16.5-x86_64-linux)
       racc (~> 1.4)
     pg (1.5.6)
-    popper_js (2.11.8)
     psych (5.1.2)
       stringio
     public_suffix (5.0.5)
@@ -279,7 +275,6 @@ PLATFORMS
 DEPENDENCIES
   autoprefixer-rails
   bootsnap
-  bootstrap (~> 5.2)
   capybara
   debug
   dotenv-rails
