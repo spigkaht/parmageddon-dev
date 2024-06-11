@@ -8,8 +8,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root to: "pages#index"
-  resources :parmas
-  resources :venues, only [:show, :new, :create, :edit, :update, :destroy]
-  resources :reviews, only [:new, :create, :edit, :update, :destroy]
-  resources :polls, only [:index, :new, :create]
+
+  resources :venues, only: [:show, :new, :create, :edit, :update, :destroy] do
+    resources :parmas, only: [:show, :new, :create, :edit, :update, :destroy] do
+      resources :reviews, only: [:new, :create, :edit, :update, :destroy]
+    end
+  end
+
+  resources :parmas, only: [:index]
+  resources :polls, only: [:index, :new, :create]
 end
