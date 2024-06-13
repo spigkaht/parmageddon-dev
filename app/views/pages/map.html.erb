@@ -1,8 +1,27 @@
 <div class="map-container">
-  stuff
-  <gmp-map center="-37.82395935058594,144.9911346435547" zoom="14" map-id="DEMO_MAP_ID">
-    stuff
-    <gmp-advanced-marker position="-37.82395935058594,144.9911346435547" title="My location"></gmp-advanced-marker>
-  </gmp-map>
+  <div
+    id="venueMap"
+    data-latitude=<%= @location[:latitude] %>
+    data-longitude=<%= @location[:longitude] %>
+  >
+    <h2>Venues in <%= @location[:name] %></h2>
+    <ol>
+      <% @venues.each do |venue| %>
+        <li
+          class="venue-list-item"
+          data-latitude=<%= venue.latitude %>
+          data-longitude=<%= venue.longitude %>
+        >
+          <h4><%= venue.name %></h4>
+          <p><%= venue.street %></p>
+          <p><%= venue.city %></p>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+  <div data-controller="gmaps"
+       data-map-markers-value="<%= @markers.to_json %>"
+       data-map-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"></div>>
+    <div id="map" data-gmaps-target="mapDiv">
+  </div>
 </div>
-stuff
