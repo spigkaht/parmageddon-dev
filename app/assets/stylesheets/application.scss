@@ -8,3 +8,21 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+
+// * {
+//   border: 1px solid red;
+// }
+
+h1 {
+  font-family: $my-font;
+  font-size: 4.5rem;
+}
+
+h2 {
+  font-family: $my-font;
+  font-size: 3rem;
+}
+
+gmp-map {
+  height: 100%;
+}
