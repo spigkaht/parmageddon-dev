@@ -6,9 +6,14 @@ class Venue < ApplicationRecord
     :city,
     :state,
     :zip,
-    :latitude,
-    :longitute,
     :rating_average,
     :price_average,
     presence: true
+
+  def address
+    [street, city, state, zip].compact.join(', ')
+  end
+
+  geocoded_by :address
+  after_validation :geocode
 end
