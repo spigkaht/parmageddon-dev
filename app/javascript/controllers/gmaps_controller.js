@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     const loader = new Loader({
-      apiKey: "AIzaSyDbUShjFNBXh3yjwgBD_aEmS3lljwdLBF8",
+      apiKey: "~~~~",
       version: "quarterly",
       libraries: ["maps", "geocoding", "marker", "elevation"]
     });
