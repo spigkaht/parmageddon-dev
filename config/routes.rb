@@ -17,4 +17,5 @@ Rails.application.routes.draw do
 
   resources :parmas, only: [:index]
   resources :polls, only: [:index, :new, :create]
+  get '/map', to: 'pages#map', as: 'map'
 end
