@@ -2,30 +2,40 @@ import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
 
 export default class extends Controller {
-  static targets = ["mapDiv"];
+  static targets = [ "mapdiv" ];
+  static values = {
+    markers: String,
+    apiKey: String
+  }
 
   connect() {
+    // const coords = document.getElementById("breweries");
+    // const city = {
+    //   lat: coords.getAttribute("data-latitude"),
+    //   lng: coords.getAttribute("data-longitude")
+    // };
+
     const loader = new Loader({
-      apiKey: "~~~~",
-      version: "quarterly",
+      apiKey: this.apiKeyValue,
+      version: "weekly",
       libraries: ["maps", "geocoding", "marker", "elevation"]
     });
 
     const mapOptions = {
-      center: { lat: -7, lng: -47 },
-      zoom: 10
+    center: { lat: -7, lng: -47 },
+    zoom: 10,
     };
 
     loader
-      .load()
-      .then((google) => {
-        this.map = new google.maps.Map(this.mapDivTarget, mapOptions);
-        this.elevation = new google.maps.ElevationService();
-        this.geocoder = new google.maps.Geocoder();
-      })
-      .catch((e) => {
-        console.log("error loading gmaps");
-      });
+    .importLibrary('maps')
+    .then(({Map}) => {
+      new Map(document.getElementById("map"), mapOptions);
+      // this.elevation = new google.maps.ElevationService();
+      // this.geocoder = new google.maps.Geocoder();
+    })
+    .catch((e) => {
+      console.log("Error loading de-maps")
+    });
   };
 };
 
