@@ -15,5 +15,6 @@ class PagesController < ApplicationController
         lng: venue.longitude
       }
     end
+    debugger
   end
 end
