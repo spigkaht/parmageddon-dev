@@ -9,11 +9,11 @@ export default class extends Controller {
   }
 
   connect() {
-    const coords = document.getElementById("breweries");
-    const city = {
-      lat: coords.getAttribute("data-latitude"),
-      lng: coords.getAttribute("data-longitude")
-    };
+    // const coords = document.getElementById("breweries");
+    // const city = {
+    //   lat: coords.getAttribute("data-latitude"),
+    //   lng: coords.getAttribute("data-longitude")
+    // };
 
     const loader = new Loader({
       apiKey: this.apiKeyValue,
