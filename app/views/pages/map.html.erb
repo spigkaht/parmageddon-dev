@@ -1,27 +1,30 @@
-<div class="map-container">
-  <div
-    id="venueMap"
-    data-latitude=<%= @location[:latitude] %>
-    data-longitude=<%= @location[:longitude] %>
-  >
-    <h2>Venues in <%= @location[:name] %></h2>
-    <ol>
-      <% @venues.each do |venue| %>
-        <li
-          class="venue-list-item"
-          data-latitude=<%= venue.latitude %>
-          data-longitude=<%= venue.longitude %>
-        >
-          <h4><%= venue.name %></h4>
-          <p><%= venue.street %></p>
-          <p><%= venue.city %></p>
-        </li>
-      <% end %>
-    </ol>
+<div data-controller="gmaps"
+       data-gmaps-markers-value="<%= @markers.to_json %>"
+       data-gmaps-api-key-value="<%= ENV['GOOGLE_MAPS_API_KEY'] %>"
+       class="map-container"
+       >
+  <div class="map-venue-info-container">
+    <div
+      id="venueMap"
+      data-latitude=<%= @location[:latitude] %>
+      data-longitude=<%= @location[:longitude] %>
+      >
+      <h2>Venues in <%= @location[:name] %></h2>
+      <ol>
+        <% @venues.each do |venue| %>
+          <li
+            class="venue-list-item"
+            data-latitude=<%= venue.latitude %>
+            data-longitude=<%= venue.longitude %>
+          >
+            <h4><%= venue.name %></h4>
+            <p><%= venue.street %></p>
+            <p><%= venue.city %></p>
+          </li>
+        <% end %>
+      </ol>
+    </div>
   </div>
-  <div data-controller="gmaps"
-       data-map-markers-value="<%= @markers.to_json %>"
-       data-map-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"></div>>
-    <div id="map" data-gmaps-target="mapDiv">
+  <div id="map" data-gmaps-target="mapdiv">
   </div>
 </div>
