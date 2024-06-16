@@ -1,20 +1,16 @@
 <div data-controller="gmaps"
-       data-gmaps-markers-value="<%= @markers.to_json %>"
        data-gmaps-api-key-value="<%= ENV['GOOGLE_MAPS_API_KEY'] %>"
        data-gmaps-location-lat-value="<%= @location[:latitude] %>"
        data-gmaps-location-lng-value="<%= @location[:longitude] %>"
+       data-gmaps-markers-value="<%= @markers.to_json %>"
+       data-gmaps-venues-value="<%= @venues.to_json %>"
        class="map-container"
        >
   <div class="map-venue-info-container">
     <h2>Venues in <%= @location[:name] %></h2>
-    <%= @location[:latitude] %>
-    <%= @location[:longitude] %>
     <ol>
       <% @venues.each do |venue| %>
-        <li class="venue-list-item"
-          data-gmaps-venue-lat-value="<%= venue.latitude %>"
-          data-gmaps-venue-lng-value="<%= venue.longitude %>"
-        >
+        <li class="venue-list-item">
           <h4><%= venue.name %></h4>
           <p><%= venue.street %></p>
           <p><%= venue.city %></p>
