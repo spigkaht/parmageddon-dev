@@ -4,12 +4,11 @@ import { Loader } from "@googlemaps/js-api-loader";
 export default class extends Controller {
   static targets = [ "mapDiv" ];
   static values = {
-    markers: String,
     apiKey: String,
     locationLat: Number,
     locationLng: Number,
-    venueLat: Number,
-    venueLng: Number
+    markers: Array,
+    venues: Array
   }
 
   connect() {
@@ -25,116 +24,74 @@ export default class extends Controller {
     });
 
     const mapOptions = {
-    center: { lat: city.lat, lng: city.lng },
-    zoom: 10,
+      center: { lat: city.lat, lng: city.lng },
+      zoom: 10,
     };
 
     loader
     .importLibrary('maps')
-    .then(({Map}) => {
-      new Map(this.mapDivTarget, mapOptions);
+    .then(({ Map, Marker }) => {
+      const map = new Map(this.mapDivTarget, mapOptions);
+
+      this.venuesValue.forEach(venue => {
+        const markerOptions = {
+          position: {
+            lat: venue.latitude,
+            lng: venue.longitude
+          },
+          map: map
+        };
+        new Marker(markerOptions);
+      })
     })
     .catch((e) => {
       console.log("Error loading de-maps")
     });
 
-    console.log(this.venueLats)
+    // this.venuesValue.forEach(venue => {
+    //   console.log(venue.latitude, venue.longitude);
+    //   console.log(venuesMap);
+    //   loader
+    //   .importLibrary('marker')
+    //   .then(({Marker}) => {
+    //     new Marker({
+    //       position: {
+    //         lat: venue.latitude,
+    //         lng: venue.longitude
+    //       },
+    //       map: venuesMap
+    //     })
+    //     })
+    //     .catch((e) => {
+    //       console.log("Error loading de-maps")
+    //     });
+    // });
   };
 };
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// import { Loader } from "@googlemaps/js-api-loader";
 
-//   const breweries = document.querySelectorAll("li.brewery-list-item");
-//   breweries.forEach(brewery => {
-//     const marker = new google.maps.Marker({
-//       position: {
-//         lat: brewery.getAttribute("data-latitude"),
-//         lng: brewery.getAttribute("data-longitude")
-//       },
-//       map: map
+// const loader = new Loader({
+//     apiKey: 'YOUR_API_KEY', // Your API key
+//     version: 'weekly', // or a specific version
+// });
+
+// const mapOptions = {
+//     center: { lat: -34.397, lng: 150.644 }, // Coordinates for the map's center
+//     zoom: 8
+// };
+
+// loader.importLibrary('maps')
+//     .then(({ Map, Marker }) => {
+//         const mapDivTarget = document.getElementById('map');
+//         const map = new Map(mapDivTarget, mapOptions);
+
+//         const markerOptions = {
+//             position: { lat: -34.397, lng: 150.644 }, // Coordinates for the marker
+//             map: map
+//         };
+//         const marker = new Marker(markerOptions);
+//     })
+//     .catch(e => {
+//         console.error(e);
 //     });
-//   }
-// }
-
-// window.initMap = initMap;
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// Connects to data-controller="google-map"
-// export default class extends Controller {
-//   static targets = ['myMap', 'lat', 'lng', 'locationName']
-
-//   connect() {
-//     let lat = 34.87
-//     let lng = -111.82
-
-//     //this.latTarget.value = lat
-//     //this.lngTarget.value = lng
-//     this.initMap(lat, lng)
-//   }
-
-
-//   async initMap(lat, lng) {
-//     // The location of Uluru
-//     const position = {lat: lat, lng: lng};
-//     let mapId = this.myMapTarget
-
-//     const {Map} = await google.maps.importLibrary("maps");
-//     // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
-//     let map = new Map(mapId, {
-//       center: position,
-//       zoom: 10,
-//       mapId: mapId
-//     });
-
-//     // The marker, positioned at Uluru
-//     // const marker = new AdvancedMarkerElement({
-//     //   map: map,
-//     //   position: position,
-//     //   title: "Uluru",
-//     // });
-
-//     this.addSingleMarker(position, map)
-//     // this.addMultipleMarker(map)
-//   }
-
-//   addSingleMarker(position, map) {
-//     const marker = new google.maps.Marker({
-//       position,
-//       map,
-//       title: `This is single marker`,
-//       label: `1`,
-//     });
-
-//     marker.setAnimation(google.maps.Animation.BOUNCE); //bouncing animation of marker
-//   }
-
-//   updateCordinate() {
-//     if (event.currentTarget.dataset.googleMapTarget = 'lat') {
-//       this.initMap(parseFloat(event.currentTarget.value), parseFloat(this.lngTarget.value))
-//     } else {
-//       this.initMap(parseFloat(this.latTarget.value), parseFloat(event.currentTarget.value))
-//     }
-//   }
-// }
-
-// addMultipleMarker(map) {
-//   const tourStops = [
-//     [{lat: 34.8791806, lng: -111.8265049}, "Boynton Pass"],
-//     [{lat: 34.8559195, lng: -111.7988186}, "Airport Mesa"],
-//     [{lat: 34.832149, lng: -111.7695277}, "Chapel of the Holy Cross"],
-//     [{lat: 34.823736, lng: -111.8001857}, "Red Rock Crossing"],
-//     [{lat: 34.800326, lng: -111.7665047}, "Bell Rock"],
-//   ];
-
-//   // The marker, positioned at Uluru
-//   tourStops.forEach(([position, title], i) => {
-//     const marker = new google.maps.Marker({
-//       position,
-//       map,
-//       title: `${i + 1}. ${title}`,
-//       label: `${i + 1}`,
-//     });
-//   });
-// }
