@@ -2,18 +2,21 @@ import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
 
 export default class extends Controller {
-  static targets = [ "mapdiv" ];
+  static targets = [ "mapDiv" ];
   static values = {
     markers: String,
-    apiKey: String
+    apiKey: String,
+    locationLat: Number,
+    locationLng: Number,
+    venueLat: Number,
+    venueLng: Number
   }
 
   connect() {
-    // const coords = document.getElementById("breweries");
-    // const city = {
-    //   lat: coords.getAttribute("data-latitude"),
-    //   lng: coords.getAttribute("data-longitude")
-    // };
+    const city = {
+      lat: this.locationLatValue,
+      lng: this.locationLngValue
+    };
 
     const loader = new Loader({
       apiKey: this.apiKeyValue,
@@ -22,36 +25,24 @@ export default class extends Controller {
     });
 
     const mapOptions = {
-    center: { lat: -7, lng: -47 },
+    center: { lat: city.lat, lng: city.lng },
     zoom: 10,
     };
 
     loader
     .importLibrary('maps')
     .then(({Map}) => {
-      new Map(document.getElementById("map"), mapOptions);
-      // this.elevation = new google.maps.ElevationService();
-      // this.geocoder = new google.maps.Geocoder();
+      new Map(this.mapDivTarget, mapOptions);
     })
     .catch((e) => {
       console.log("Error loading de-maps")
     });
+
+    console.log(this.venueLats)
   };
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// function initMap() {
-//   const coords = document.getElementById("breweries");
-//   const city = {
-//     lat: coords.getAttribute("data-latitude"),
-//     lng: coords.getAttribute("data-longitude")
-//   };
-
-//   const map = new google.maps.Map(document.getElementById("map"), {
-//     zoom: 10,
-//     center: city
-//   });
 
 //   const breweries = document.querySelectorAll("li.brewery-list-item");
 //   breweries.forEach(brewery => {
