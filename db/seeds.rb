@@ -8,6 +8,10 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+puts "Clearing out your junk.."
+Venue.destroy_all
+puts "Clean!"
+
 venues = [
   {
     name: "Cardnia Club",
@@ -46,7 +50,19 @@ venues = [
   }
 ]
 
-5.times do [i]
-  venue = Venue.new(name: venues[i][:name], street: venues[i][:street], city: venues[i][:city], state: venues[i][:state], )
+5.times do |i|
+  venue = Venue.new(
+                    name: venues[i][:name],
+                    street: venues[i][:street],
+                    city: venues[i][:city],
+                    state: venues[i][:state],
+                    zip: venues[i][:zip],
+                    rating_average: 4.5,
+                    price_average: 19.5
+                    )
   venue.save
+  puts "#{i + 1} done"
 end
+puts "Venues added!"
+
+puts "All finished!"

@@ -3,11 +3,12 @@ class PagesController < ApplicationController
   end
 
   def map
-    @location = {
-                  name: "Melbourne",
-                  latitude: 37.8124,
-                  longitude: 144.9623
-                }
+    @location = {}
+    @location[:name] = Venue.first.city
+    @coords = Venue.first.geocode
+    @location[:latitude] = @coords[0]
+    @location[:longitude] = @coords[1]
+
     @venues = Venue.all
     @markers = @venues.geocoded.map do |venue|
       {
@@ -15,6 +16,5 @@ class PagesController < ApplicationController
         lng: venue.longitude
       }
     end
-    debugger
   end
 end
