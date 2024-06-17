@@ -15,5 +15,12 @@ class Venue < ApplicationRecord
   end
 
   geocoded_by :address
-  after_validation :geocode
+  after_save :geocode
+
+  after_validation :log_address_change, if: :street_changed?
+
+  def log_address_change
+    Rails.logger.debug "Coordinates changed from #{longitude_was} to #{longitude}"
+    Rails.logger.debug "Street address changed from #{street_was} to #{street}"
+  end
 end

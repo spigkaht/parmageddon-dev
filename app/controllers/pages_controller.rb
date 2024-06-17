@@ -10,8 +10,9 @@ class PagesController < ApplicationController
     @location[:longitude] = @coords[1]
 
     @venues = Venue.all
-    @markers = @venues.geocoded.map do |venue|
+    @markers = @venues.map do |venue|
       {
+        name: venue.name,
         lat: venue.latitude,
         lng: venue.longitude
       }

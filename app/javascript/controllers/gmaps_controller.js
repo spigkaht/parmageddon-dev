@@ -20,7 +20,7 @@ export default class extends Controller {
     const loader = new Loader({
       apiKey: this.apiKeyValue,
       version: "weekly",
-      libraries: ["maps", "geocoding", "marker", "elevation"]
+      libraries: ["maps"]
     });
 
     const mapOptions = {
@@ -31,67 +31,42 @@ export default class extends Controller {
     loader
     .importLibrary('maps')
     .then(({ Map, Marker }) => {
-      const map = new Map(this.mapDivTarget, mapOptions);
+      const bounds = new google.maps.LatLngBounds();
+      const markerURL = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg"
+      const icon = {
+        url: markerURL,
+        scaledSize: new google.maps.Size(50, 50), // Scale the SVG
+        anchor: new google.maps.Point(25, 50), // Anchor point of the marker (center bottom)
+        labelOrigin: new google.maps.Point(25, -15)
+      };
 
-      this.venuesValue.forEach(venue => {
+      const map = new Map(this.mapDivTarget, mapOptions);
+      console.log("position INCORRECT: ", this.markersValue);
+
+      this.markersValue.forEach(marker => {
         const markerOptions = {
           position: {
-            lat: venue.latitude,
-            lng: venue.longitude
+            lat: parseFloat(marker.lat),
+            lng: parseFloat(marker.lng)
           },
+          label: {
+            text: marker.name,
+            className: "gmaps-marker",
+            fontSize: "16px",
+            fontWeight: "700",
+            fontFamily: "Roboto"
+          },
+          icon: icon,
           map: map
         };
-        new Marker(markerOptions);
+        console.log("position INCORRECT: ", markerOptions.position);
+        const gmapsMarker = new google.maps.Marker(markerOptions);
+        bounds.extend(gmapsMarker.getPosition());
       })
+      map.fitBounds(bounds);
     })
     .catch((e) => {
-      console.log("Error loading de-maps")
+      console.log("Error loading de-maps", e);
     });
-
-    // this.venuesValue.forEach(venue => {
-    //   console.log(venue.latitude, venue.longitude);
-    //   console.log(venuesMap);
-    //   loader
-    //   .importLibrary('marker')
-    //   .then(({Marker}) => {
-    //     new Marker({
-    //       position: {
-    //         lat: venue.latitude,
-    //         lng: venue.longitude
-    //       },
-    //       map: venuesMap
-    //     })
-    //     })
-    //     .catch((e) => {
-    //       console.log("Error loading de-maps")
-    //     });
-    // });
   };
 };
-
-// import { Loader } from "@googlemaps/js-api-loader";
-
-// const loader = new Loader({
-//     apiKey: 'YOUR_API_KEY', // Your API key
-//     version: 'weekly', // or a specific version
-// });
-
-// const mapOptions = {
-//     center: { lat: -34.397, lng: 150.644 }, // Coordinates for the map's center
-//     zoom: 8
-// };
-
-// loader.importLibrary('maps')
-//     .then(({ Map, Marker }) => {
-//         const mapDivTarget = document.getElementById('map');
-//         const map = new Map(mapDivTarget, mapOptions);
-
-//         const markerOptions = {
-//             position: { lat: -34.397, lng: 150.644 }, // Coordinates for the marker
-//             map: map
-//         };
-//         const marker = new Marker(markerOptions);
-//     })
-//     .catch(e => {
-//         console.error(e);
-//     });
