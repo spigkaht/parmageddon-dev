@@ -1,13 +1,13 @@
 <div data-controller="gmaps"
-       data-gmaps-api-key-value="<%= ENV['GOOGLE_MAPS_API_KEY'] %>"
-       data-gmaps-location-lat-value="<%= @location[:latitude] %>"
-       data-gmaps-location-lng-value="<%= @location[:longitude] %>"
-       data-gmaps-markers-value="<%= @markers.to_json %>"
-       data-gmaps-venues-value="<%= @venues.to_json %>"
-       class="map-container"
-       >
+    data-gmaps-api-key-value="<%= ENV['GOOGLE_MAPS_API_KEY'] %>"
+    <%# data-gmaps-location-lat-value=" @location[:latitude] "%>
+    <%# data-gmaps-location-lng-value=" @location[:longitude] "%>
+    <%# data-gmaps-markers-value=" @markers.to_json "%>
+    data-gmaps-venues-value="<%= @venues.to_json %>"
+    class="map-container"
+    >
   <div class="map-venue-info-container">
-    <h2>Venues in <%= @location[:name] %></h2>
+    <h2>Venues in <%= @venues.first[:city] %></h2>
     <ol>
       <% @venues.each do |venue| %>
         <li class="venue-list-item">
@@ -18,6 +18,12 @@
       <% end %>
     </ol>
   </div>
-  <div id="map" data-gmaps-target="mapDiv">
+  <div id="gmaps" data-gmaps-target="mapDiv">
+  </div>
+  <div id="mapbox"
+      data-controller="mapbox"
+      data-mapbox-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"
+      <%# data-mapbox-markers-value=" @markers.to_json "%>
+      >
   </div>
 </div>

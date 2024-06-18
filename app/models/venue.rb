@@ -15,5 +15,5 @@ class Venue < ApplicationRecord
   end
 
   geocoded_by :address
-  after_validation :geocode
+  after_save :geocode
 end

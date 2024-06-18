@@ -5,93 +5,73 @@ export default class extends Controller {
   static targets = [ "mapDiv" ];
   static values = {
     apiKey: String,
-    locationLat: Number,
-    locationLng: Number,
-    markers: Array,
+    // locationLat: Number,
+    // locationLng: Number,
+    // markers: Array,
     venues: Array
   }
 
   connect() {
-    const city = {
-      lat: this.locationLatValue,
-      lng: this.locationLngValue
-    };
-
     const loader = new Loader({
       apiKey: this.apiKeyValue,
       version: "weekly",
-      libraries: ["maps", "geocoding", "marker", "elevation"]
+      libraries: ["maps"]
     });
-
-    const mapOptions = {
-      center: { lat: city.lat, lng: city.lng },
-      zoom: 10,
-    };
 
     loader
     .importLibrary('maps')
-    .then(({ Map, Marker }) => {
+    .then(({ Map, Marker, Geocoder }) => {
+      const bounds = new google.maps.LatLngBounds();
+      const geocoder = new google.maps.Geocoder();
+      const latlng = new google.maps.LatLng(-37.8136, 144.9631)
+      const markerURL = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg"
+
+      const icon = {
+        url: markerURL,
+        scaledSize: new google.maps.Size(50, 50), // Scale the SVG
+        anchor: new google.maps.Point(25, 50), // Anchor point of the marker (center bottom)
+        labelOrigin: new google.maps.Point(25, -15)
+      };
+
+      const mapOptions = {
+        center: latlng,
+        zoom: 10,
+      };
+
       const map = new Map(this.mapDivTarget, mapOptions);
 
       this.venuesValue.forEach(venue => {
-        const markerOptions = {
-          position: {
-            lat: venue.latitude,
-            lng: venue.longitude
-          },
-          map: map
-        };
-        new Marker(markerOptions);
+        const address = venue.street.concat(", ", venue.city, ", ", venue.state, ", ", venue.zip)
+        geocoder.geocode({"address": address}, function(results, status) {
+          if (status == "OK") {
+            const center = results[0].geometry.location;
+            console.log("address: ", address);
+            console.log("results: ", results[0]);
+            const markerOptions = {
+              label: {
+                text: venue.name,
+                className: "gmaps-marker",
+                fontSize: "16px",
+                fontWeight: "700",
+                fontFamily: "Roboto"
+              },
+              position: results[0].geometry.location,
+              icon: icon,
+              map: map
+            };
+
+            const marker = new google.maps.Marker(markerOptions);
+
+            bounds.extend(marker.getPosition());
+          } else {
+            alert("Geocode was not successful for the following reason: " + status);
+          }
+        });
       })
+      map.fitBounds(bounds);
     })
     .catch((e) => {
-      console.log("Error loading de-maps")
+      console.log("Error loading de-maps", e);
     });
-
-    // this.venuesValue.forEach(venue => {
-    //   console.log(venue.latitude, venue.longitude);
-    //   console.log(venuesMap);
-    //   loader
-    //   .importLibrary('marker')
-    //   .then(({Marker}) => {
-    //     new Marker({
-    //       position: {
-    //         lat: venue.latitude,
-    //         lng: venue.longitude
-    //       },
-    //       map: venuesMap
-    //     })
-    //     })
-    //     .catch((e) => {
-    //       console.log("Error loading de-maps")
-    //     });
-    // });
   };
 };
-
-// import { Loader } from "@googlemaps/js-api-loader";
-
-// const loader = new Loader({
-//     apiKey: 'YOUR_API_KEY', // Your API key
-//     version: 'weekly', // or a specific version
-// });
-
-// const mapOptions = {
-//     center: { lat: -34.397, lng: 150.644 }, // Coordinates for the map's center
-//     zoom: 8
-// };
-
-// loader.importLibrary('maps')
-//     .then(({ Map, Marker }) => {
-//         const mapDivTarget = document.getElementById('map');
-//         const map = new Map(mapDivTarget, mapOptions);
-
-//         const markerOptions = {
-//             position: { lat: -34.397, lng: 150.644 }, // Coordinates for the marker
-//             map: map
-//         };
-//         const marker = new Marker(markerOptions);
-//     })
-//     .catch(e => {
-//         console.error(e);
-//     });
