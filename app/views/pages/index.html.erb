@@ -1,26 +1,34 @@
 <div class="index-container">
-  <div class="index-banner">
-    <div class="index-banner-title">
-      <h2>PARMAGEDDON</h2>
+  <div class="index-grid-container">
+    <div class="index-banner">
+
+      <div class="index-banner-title">
+        <h2>PARMAGEDDON</h2>
+      </div>
     </div>
     <div class="index-banner-image">
+      <%= image_tag asset_url("parma.png") %>
+    </div>
+    <div class="index-hero">
+      <h1>Find a Parma that's right for you.</h1>
+    </div>
+    <div class="empty">
     </div>
   </div>
-  <div class="index-hero">
-    <h1>Find a Parma that's right for you.</h1>
-  </div>
-  <div class="index-links">
-    <div class="index-links index-links-left">
-      <p>Find a Parma</p>
+    <div class="index-links">
+      <div class="index-links index-links-left">
+        <h4>Find a Parma</h4>
+      </div>
+      <div class="index-links index-links-mid">
+        <h4>Enter your postcode</h4>
+      </div>
+      <div class="index-links index-links-right">
+        <%= form_with url: map_path, method: :get, id: 'postcode-form', data: { controller: 'postcode', action: 'submit->postcode#submit' } do %>
+          <%= text_field_tag :p, nil, data: { postcode_target: 'input' } %>
+          <button type="submit" class="index-links-button-image" data-action="postcode#submit">
+            <%= image_tag 'chevron-right-double.svg', size: "50", alt: 'Map centered at postcode' %>
+          </button>
+        <% end %>
+      </div>
     </div>
-    <div class="index-links index-links-mid">
-      <p>Enter your postcode</p>
-    </div>
-    <div class="index-links index-links-right">
-      <input></input>
-      <%= link_to map_path do %>
-        <%= image_tag asset_url("chevron-right-double.svg"), size: '25' %>
-      <% end %>
-    </div>
-  </div>
 </div>
