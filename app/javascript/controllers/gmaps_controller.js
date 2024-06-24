@@ -22,7 +22,7 @@ export default class extends Controller {
 
     loader
       .importLibrary('maps')
-      .then(({ Map, Marker, Geocoder }) => {
+      .then(({ Map }) => {
         // geocoder variable (used multiple times)
         let geocoder;
         // empty latngnbounds object for gmaps api
@@ -48,26 +48,6 @@ export default class extends Controller {
 
         // create map, div for placement, options
         const map = new Map(this.mapDivTarget, mapOptions);
-
-        // sets request options for places query
-        const request = {
-          query: `Pubs in ${this.locationValue}`,
-          fields: ['name', 'geometry'],
-        };
-
-        // run google places query. iterate results. output error if not OK
-        var places = new google.maps.places.PlacesService(map);
-        places.findPlaceFromQuery(request, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (let i = 0; i < results.length ; i++) {
-              console.log(results[i]);
-              console.log("length: ", results.length);
-            }
-          }
-          else {
-            console.log("Error!");
-          }
-        })
 
         // geocode location (parameter/postcode), set map center, output error if no results
         geocoder = new google.maps.Geocoder();
@@ -121,106 +101,3 @@ export default class extends Controller {
       .catch((e) => { console.log("Error loading maps due to ", e) });
   }
 }
-
-// document.addEventListener("DOMContentLoaded", function() {
-//   // Get the URL parameters
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const param = urlParams.get('p');
-
-//   if (param) {
-//     // Convert param to a number if necessary
-//     const paramValue = Number(param);
-
-//     // Perform your calculation (example: multiply by 2)
-//     const result = paramValue * 2;
-
-//     // Send the result back to the Rails server
-//     sendResultToServer(result);
-//   }
-// });
-
-// function sendResultToServer(result) {
-//   // Send an AJAX request to the Rails server
-//   fetch('/process_result', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-//     },
-//     body: JSON.stringify({ result: result })
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log('Success:', data);
-//     // Optionally update the DOM based on the response
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
-// }
-
-// # config/routes.rb
-// post 'process_result', to: 'pages#process_result'
-
-// # app/controllers/pages_controller.rb
-// class PagesController < ApplicationController
-//   protect_from_forgery with: :null_session  # Disable CSRF protection for this action if you need
-
-//   def process_result
-//     result = params[:result]
-//     # Do something with the result, like storing it in the database
-//     render json: { message: "Result received: #{result}" }
-//   end
-// end
-
-// document.addEventListener("DOMContentLoaded", function() {
-//   // Get the URL parameters
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const param = urlParams.get('p');
-
-//   if (param) {
-//     // Convert param to a number if necessary
-//     const paramValue = Number(param);
-
-//     // Perform your calculation (example: multiply by 2)
-//     const result = paramValue * 2;
-
-//     // Send the result back to the Rails server
-//     sendResultToServer(result);
-//   }
-// });
-
-// function sendResultToServer(result) {
-//   // Send an AJAX request to the Rails server
-//   fetch('/process_result', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-//     },
-//     body: JSON.stringify({ result: result })
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log('Success:', data);
-//     // Optionally update the DOM based on the response
-//     document.getElementById('result').innerText = `Result received: ${data.message}`;
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
-// }
-
-// <!-- app/views/pages/show.html.erb -->
-// <!DOCTYPE html>
-// <html>
-// <head>
-//   <title>Parameter Result</title>
-//   <meta name="csrf-token" content="<%= csrf_meta_tags %>">
-// </head>
-// <body>
-//   <h1>Parameter Result</h1>
-//   <div id="result"></div>
-//   <script src="<%= asset_path 'your_javascript_file.js' %>"></script>
-// </body>
-// </html>
