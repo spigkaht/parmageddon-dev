@@ -1,13 +1,18 @@
 <div class="map-page-container">
   <div>
-    <h2>Venues in <%= @venues.first[:city] %></h2>
+    <%# debugger %>
+    <h2>Venues in <%= @places_results.first["name"] %></h2>
     <ol>
-      <% @venues.each do |venue| %>
-        <li class="venue-list-item">
-          <h4><%= venue.name %></h4>
-          <p><%= venue.street %></p>
-          <p><%= venue.city %></p>
-        </li>
+      <% if @venues == nil %>
+        <li>"No venues found!"</li>
+      <% else %>
+        <% @venues.each do |venue| %>
+          <li class="venue-list-item">
+            <h4><%= venue.name %></h4>
+            <p><%= venue.street %></p>
+            <p><%= venue.city %></p>
+          </li>
+        <% end %>
       <% end %>
     </ol>
   </div>

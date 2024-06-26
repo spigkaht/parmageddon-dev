@@ -3,7 +3,6 @@ class PagesController < ApplicationController
   end
 
   def map
-    @postcode = params[:p]
-    @venues = Venue.all
+    @postcode = params[:postcode]
   end
 end
