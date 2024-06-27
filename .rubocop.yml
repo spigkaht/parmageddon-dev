@@ -26,6 +26,8 @@ Style/MutableConstant:
   Enabled: false
 Style/SignalException:
   Enabled: false
+Style/HashSyntax:
+  Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
 Style/MissingRespondToMissing:
