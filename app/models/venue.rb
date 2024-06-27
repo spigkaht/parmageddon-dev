@@ -5,13 +5,13 @@ class Venue < ApplicationRecord
   validates :street,
     :city,
     :state,
-    :zip,
+    :postcode,
     :rating_average,
     :price_average,
     presence: true
 
   def address
-    [street, city, state, zip].compact.join(', ')
+    [street, city, state, postcode].compact.join(', ')
   end
 
   geocoded_by :address

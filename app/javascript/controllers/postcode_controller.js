@@ -11,7 +11,8 @@ export default class extends Controller {
     event.preventDefault();
     const inputValue = this.inputTarget.value;
     const form = this.element;
-    form.action = `/map?p=${encodeURIComponent(inputValue)}`;
+    form.action = `/search`;
+    form.method = "post";
     form.submit();
   }
 }

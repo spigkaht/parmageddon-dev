@@ -1,4 +1,11 @@
+
 <div class="index-container">
+  <% if flash[:error] %>
+    <div class="alert" role="alert">
+      <%= flash[:error] %>
+      <button type="button" class="close-btn" onclick="this.parentElement.style.display='none';" aria-label="Close">&times;</button>
+    </div>
+  <% end %>
   <div class="index-grid-container">
     <div class="index-banner">
       <div class="index-banner-title">
@@ -22,11 +29,11 @@
         <h4>Enter your postcode</h4>
       </div>
       <div class="index-links index-links-right">
-        <%= form_with url: map_path, method: :post do |f| %>
-          <%= f.text_field :postcode %>
-          <%= f.hidden_field :radius, value: '5000' %>
-          <%= f.hidden_field :type, value: 'pub' %>
-          <%= f.submit '', style: "background: url(#{asset_path('chevron-right-double.svg')}) no-repeat; border: none; width: 50px; height: 50px;" %>
+        <%= form_with url: search_path, method: :post, id: 'postcode-form', data: { controller: 'postcode', action: 'submit->postcode#submit' } do %>
+          <%= text_field_tag :postcode, nil, data: { postcode_target: 'input' } %>
+          <button type="submit" class="index-links-button-image" data-action="postcode#submit">
+            <%= image_tag 'chevron-right-double.svg', size: "50", alt: 'Map centered at postcode' %>
+          </button>
         <% end %>
       </div>
     </div>

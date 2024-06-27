@@ -43,7 +43,7 @@ export default class extends Controller {
         // sets options for gmaps api map instance
         const mapOptions = {
           center: latlng,
-          zoom: 10,
+          zoom: 11,
         };
 
         // create map, div for placement, options
@@ -83,7 +83,7 @@ export default class extends Controller {
         geocoder = new google.maps.Geocoder();
         const geocodePromises = this.venuesValue.map(venue => {
           // build address
-          const address = `${venue.street}, ${venue.city}, ${venue.state}, ${venue.zip}`;
+          const address = `${venue.street}, ${venue.city}, ${venue.state}, ${venue.postcode}`;
           // geocode address, return response to 'geocodePromises' for catch
           return geocoder.geocode({ address: address }).then((response) => {
             // only if results exist
@@ -121,106 +121,3 @@ export default class extends Controller {
       .catch((e) => { console.log("Error loading maps due to ", e) });
   }
 }
-
-// document.addEventListener("DOMContentLoaded", function() {
-//   // Get the URL parameters
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const param = urlParams.get('p');
-
-//   if (param) {
-//     // Convert param to a number if necessary
-//     const paramValue = Number(param);
-
-//     // Perform your calculation (example: multiply by 2)
-//     const result = paramValue * 2;
-
-//     // Send the result back to the Rails server
-//     sendResultToServer(result);
-//   }
-// });
-
-// function sendResultToServer(result) {
-//   // Send an AJAX request to the Rails server
-//   fetch('/process_result', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-//     },
-//     body: JSON.stringify({ result: result })
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log('Success:', data);
-//     // Optionally update the DOM based on the response
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
-// }
-
-// # config/routes.rb
-// post 'process_result', to: 'pages#process_result'
-
-// # app/controllers/pages_controller.rb
-// class PagesController < ApplicationController
-//   protect_from_forgery with: :null_session  # Disable CSRF protection for this action if you need
-
-//   def process_result
-//     result = params[:result]
-//     # Do something with the result, like storing it in the database
-//     render json: { message: "Result received: #{result}" }
-//   end
-// end
-
-// document.addEventListener("DOMContentLoaded", function() {
-//   // Get the URL parameters
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const param = urlParams.get('p');
-
-//   if (param) {
-//     // Convert param to a number if necessary
-//     const paramValue = Number(param);
-
-//     // Perform your calculation (example: multiply by 2)
-//     const result = paramValue * 2;
-
-//     // Send the result back to the Rails server
-//     sendResultToServer(result);
-//   }
-// });
-
-// function sendResultToServer(result) {
-//   // Send an AJAX request to the Rails server
-//   fetch('/process_result', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-//     },
-//     body: JSON.stringify({ result: result })
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log('Success:', data);
-//     // Optionally update the DOM based on the response
-//     document.getElementById('result').innerText = `Result received: ${data.message}`;
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
-// }
-
-// <!-- app/views/pages/show.html.erb -->
-// <!DOCTYPE html>
-// <html>
-// <head>
-//   <title>Parameter Result</title>
-//   <meta name="csrf-token" content="<%= csrf_meta_tags %>">
-// </head>
-// <body>
-//   <h1>Parameter Result</h1>
-//   <div id="result"></div>
-//   <script src="<%= asset_path 'your_javascript_file.js' %>"></script>
-// </body>
-// </html>
