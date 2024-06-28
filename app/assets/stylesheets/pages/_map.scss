@@ -1,18 +1,20 @@
 .map-page-container {
   display: flex;
-  margin-left: 100px;
+  justify-content: space-between;
+}
+
+.map-venues-container {
+  margin: 2rem;
+  padding: 1rem;
+  width: 30%;
+  border: 1px solid blue;
 }
 
 #gmaps {
   width: 100%;
-  height: 700px;
-  margin-left: 100px;
-}
-
-#mapbox {
-  width: 100%;
-  height: 700px;
-  margin-left: 100px;
+  height: 60vh;
+  margin: 2rem;
+  border: solid 1rem white;
 }
 
 .gmaps-marker {
@@ -21,4 +23,81 @@
   border: 2px solid rgb(34, 34, 34);
   border-radius: 10px;
   padding: 5px;
+}
+
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.carousel-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid grey;
+}
+
+.carousel-item {
+  position: relative;
+  display: none;
+  flex: 0 0 100%;
+  width: 100%;
+  transition: transform 0.6s ease-in-out;
+}
+
+.carousel-item.active {
+  display: block;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  // position: absolute;
+  // top: 0;
+  // bottom: 0;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: no-repeat 50% / 100% 100%;
+}
+
+.carousel-control-prev-icon {
+  background-image: url('chevron-left-double.svg');
+}
+
+.carousel-control-next-icon {
+  background-image: url('chevron-right-double.svg');
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  color: #fff;
+  text-decoration: none;
+  outline: 0;
+  opacity: 0.9;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

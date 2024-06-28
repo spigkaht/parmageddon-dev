@@ -30,7 +30,7 @@
         <h4>Enter your postcode</h4>
       </div>
       <div class="index-links index-links-right">
-        <%= form_with url: search_path, method: :post, id: 'postcode-form', data: { controller: 'postcode', action: 'submit->postcode#submit' } do %>
+        <%= form_with url: map_path, method: :post, id: 'postcode-form', data: { controller: 'postcode', action: 'submit->postcode#submit' } do %>
           <%= text_field_tag :postcode, nil, data: { postcode_target: 'input' } %>
           <button type="submit" class="index-links-button-image" data-action="postcode#submit">
             <%= image_tag 'chevron-right-double.svg', size: "50", alt: 'Map centered at postcode' %>
