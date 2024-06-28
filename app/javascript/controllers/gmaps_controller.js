@@ -50,24 +50,24 @@ export default class extends Controller {
         const map = new Map(this.mapDivTarget, mapOptions);
 
         // sets request options for places query
-        const request = {
-          query: `Pubs in ${this.locationValue}`,
-          fields: ['name', 'geometry'],
-        };
+        // const request = {
+        //   query: `Pubs in ${this.locationValue}`,
+        //   fields: ['name', 'geometry'],
+        // };
 
         // run google places query. iterate results. output error if not OK
-        var places = new google.maps.places.PlacesService(map);
-        places.findPlaceFromQuery(request, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (let i = 0; i < results.length ; i++) {
-              console.log(results[i]);
-              console.log("length: ", results.length);
-            }
-          }
-          else {
-            console.log("Error!");
-          }
-        })
+        // var places = new google.maps.places.PlacesService(map);
+        // places.findPlaceFromQuery(request, function(results, status) {
+        //   if (status === google.maps.places.PlacesServiceStatus.OK) {
+        //     for (let i = 0; i < results.length ; i++) {
+        //       console.log(results[i]);
+        //       console.log("length: ", results.length);
+        //     }
+        //   }
+        //   else {
+        //     console.log("Error!");
+        //   }
+        // })
 
         // geocode location (parameter/postcode), set map center, output error if no results
         geocoder = new google.maps.Geocoder();
