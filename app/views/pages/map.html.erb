@@ -1,19 +1,28 @@
 <div class="map-page-container">
-  <div>
-    <h2>Venues near <%= @postcode %></h2>
-    <ol>
-      <% if @venues.nil? %>
-        <li>No venues found!</li>
-      <% else %>
-        <% @venues.each do |venue| %>
-          <li class="venue-list-item">
-            <h4><%= venue.name %></h4>
-            <p><%= venue.street %></p>
-            <p><%= venue.city %></p>
-          </li>
-        <% end %>
-      <% end %>
-    </ol>
+  <div class="map-venues-container">
+      <%# <% if @venues.nil? %>
+        <%# No venues found! %>
+      <%# else %>
+      <%# end %>
+
+      <div id="carouselControls" class="carousel slide" data-controller="carousel">
+        <a class="carousel-control-prev" href="#" role="button" id="carouselBtnPrev" data-action="click->carousel#prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <div class="carousel-inner">
+          <% @venues.each do |venue| %>
+            <div class="carousel-item active" data-carousel-target="card">
+              <%= render "pages/card", :venue => venue %>
+            </div>
+          <% end %>
+        </div>
+        <a class="carousel-control-next" href="#" role="button" id="carouselBtnNext" data-action="click->carousel#next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
   </div>
   <div id="gmaps" data-controller="gmaps"
     data-gmaps-api-key-value="<%= ENV['GMAPS_API_KEY'] %>"

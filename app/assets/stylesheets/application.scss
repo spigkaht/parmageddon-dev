@@ -25,7 +25,7 @@ body {
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
-  background-color: #FAFAFA;
+  background-color: #EFEFEF;
 }
 
 h1 {
@@ -70,4 +70,14 @@ h2 {
 
 .close-btn:hover {
   color: black;
+}
+
+.stripes {
+  background: repeating-linear-gradient(
+    -55deg,
+    #FFF,
+    #FFF 10px,
+    #EEE 10px,
+    #EEE 200px
+  );
 }
