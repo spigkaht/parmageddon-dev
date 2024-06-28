@@ -71,3 +71,13 @@ h2 {
 .close-btn:hover {
   color: black;
 }
+
+.stripes {
+  background: repeating-linear-gradient(
+    -55deg,
+    #FFF,
+    #FFF 10px,
+    #EEE 10px,
+    #EEE 200px
+  );
+  }

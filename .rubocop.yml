@@ -28,6 +28,8 @@ Style/SignalException:
   Enabled: false
 Style/HashSyntax:
   Enabled: false
+Metrics/MethodLength:
+  Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
 Style/MissingRespondToMissing:
