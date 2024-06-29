@@ -1,0 +1,18 @@
+.venue-card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  * {
+    padding: 0.2rem;
+  }
+}
+
+.venue-card-bg {
+  background-color: $my-charcoal;
+  color: white;
+}
+
+.venue-card-ratings {
+  font-weight: 700;
+}

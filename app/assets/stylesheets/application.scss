@@ -8,6 +8,7 @@
 
 // Your CSS partials
 @import "components/index";
+@import "components/card";
 @import "pages/index";
 @import "pages/map";
 
@@ -19,23 +20,30 @@
   margin-block-start: 0;
   margin-block-end: 0;
   box-sizing: border-box;
+  font-family: $my-font;
 }
 
 body {
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
-  background-color: #EFEFEF;
+  background-color: #222222;
 }
 
 h1 {
-  font-family: $my-font;
   font-size: 4.5rem;
 }
 
 h2 {
-  font-family: $my-font;
   font-size: 3rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
 }
 
 // ****** bootstrap classes *******

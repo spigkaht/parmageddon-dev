@@ -22,13 +22,12 @@ export default class extends Controller {
 
     loader
       .importLibrary('maps')
-      .then(({ Map, Marker, Geocoder }) => {
+      .then(({ Map }) => {
         // geocoder variable (used multiple times)
-        let geocoder;
+        const geocoder = new google.maps.Geocoder();
+        console.log("geocoder: ", geocoder)
         // empty latngnbounds object for gmaps api
         const bounds = new google.maps.LatLngBounds();
-        // latitude and longitude for melbourne ? useless ???
-        const latlng = new google.maps.LatLng(-37.8136, 144.9631);
         // url for chicken marker
         const markerURL = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg";
 
@@ -42,45 +41,25 @@ export default class extends Controller {
 
         // sets options for gmaps api map instance
         const mapOptions = {
-          center: latlng,
           zoom: 11,
         };
 
         // create map, div for placement, options
         const map = new Map(this.mapDivTarget, mapOptions);
-
-        // sets request options for places query
-        // const request = {
-        //   query: `Pubs in ${this.locationValue}`,
-        //   fields: ['name', 'geometry'],
-        // };
-
-        // run google places query. iterate results. output error if not OK
-        // var places = new google.maps.places.PlacesService(map);
-        // places.findPlaceFromQuery(request, function(results, status) {
-        //   if (status === google.maps.places.PlacesServiceStatus.OK) {
-        //     for (let i = 0; i < results.length ; i++) {
-        //       console.log(results[i]);
-        //       console.log("length: ", results.length);
-        //     }
-        //   }
-        //   else {
-        //     console.log("Error!");
-        //   }
-        // })
-
+        console.log(this.locationValue);
         // geocode location (parameter/postcode), set map center, output error if no results
-        geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: this.locationValue }).then((response) => {
           if (response.results[0]) {
             map.setCenter(response.results[0].geometry.location);
           } else {
             window.alert("No results for venue found");
           }
+        }).catch((e) => {
+          console.log("address: ", this.locationValue);
+          window.alert("Geocoding error for location: " + e.message);
         })
 
         // geocode each instance of @venues
-        geocoder = new google.maps.Geocoder();
         const geocodePromises = this.venuesValue.map(venue => {
           // build address
           const address = `${venue.street}, ${venue.city}, ${venue.state}, ${venue.postcode}`;

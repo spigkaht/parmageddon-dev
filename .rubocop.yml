@@ -30,6 +30,8 @@ Style/HashSyntax:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
 Style/MissingRespondToMissing:

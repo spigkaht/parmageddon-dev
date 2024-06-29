@@ -3,6 +3,12 @@ class PagesController < ApplicationController
   end
 
   def map
+    if params[:postcode]
+      session[:postcode] = params[:postcode]
+    else
+      params[:postcode] = session[:postcode]
+    end
+
     @postcode = params[:postcode]
     @venues = Venue.where(postcode: @postcode)
   end
