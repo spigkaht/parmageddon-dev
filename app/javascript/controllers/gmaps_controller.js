@@ -17,6 +17,7 @@ export default class extends Controller {
     const loader = new Loader({
       apiKey: this.apiKeyValue,
       version: "weekly",
+      region: "AU",
       libraries: ["places"]
     });
 
@@ -42,6 +43,7 @@ export default class extends Controller {
         // sets options for gmaps api map instance
         const mapOptions = {
           zoom: 11,
+          disableDefaultUI: true
         };
 
         // create map, div for placement, options
