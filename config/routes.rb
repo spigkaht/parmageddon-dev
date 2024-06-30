@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resources :parmas, only: [:index]
   resources :polls, only: [:index, :new, :create]
-  get '/map', to: 'pages#map', as: 'map'
-  post '/map', to: 'pages#search'
+  get "/map", to: "pages#map", as: "map"
+  post "/map", to: "pages#search"
+  get "reset_session_map", to: "pages#reset_session_map"
 end

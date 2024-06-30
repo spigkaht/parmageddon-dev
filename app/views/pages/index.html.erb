@@ -1,7 +1,7 @@
 <div class="index-container">
-  <% if flash[:error] %>
-    <div class="alert" role="alert">
-      <%= flash[:error] %>
+  <% if flash[:notice] %>
+    <div class="notice" role="alert">
+      <%= flash[:notice] %>
       <button type="button" class="close-btn" onclick="this.parentElement.style.display='none';" aria-label="Close">&times;</button>
     </div>
   <% end %>
