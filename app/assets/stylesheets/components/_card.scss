@@ -1,24 +1,60 @@
 .venue-card-container {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  height: 100%;
+  background-color: #84a98c;
+  gap: 0.4rem;
+  padding: 0.4rem;
+  min-height: 550px;
 
   * {
-    padding: 0.2rem;
+    padding: 0.3rem;
   }
 }
 
-.venue-card-bg {
-  background-color: #FB8B24;
-  color: white;
+.venue-card-frame {
+  height: 100%;
+}
+
+.venue-card {
+  background-color: #2f3e46;
+  color: #DDDDDD;
+}
+
+.venue-card-title {
+  padding: 1rem 0.3rem;
 }
 
 .venue-card-ratings {
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  padding: 1rem 1.5rem 1rem 0.3rem;
   font-weight: 700;
+  text-align: right;
+
+  i {
+    margin: 0 0.5rem;
+  }
 }
 
-.venue-card-rating-main {
-  background-color: #B4B4B4;
+.venue-card-ratings-total {
+  font-weight: 700;
+  flex: 1 0 auto;
+  font-size: 2.5rem;
+
+  i {
+    margin: 0 0.5rem;
+  }
+}
+
+.venue-card-button {
+  border: none;
+  border-radius: 1rem;
+}
+
+.venue-card-button:hover {
+  background-color: black;
   color: white;
+  border: none;
+  border-radius: 1rem;
+  transition: all 0.5s ease;
 }

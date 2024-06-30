@@ -1,20 +1,19 @@
 <div class="venue-card-container">
-  <div class="venue-card-bg">
-    <h4><%= venue.name %></h4>
-  </div>
-  <div class="venue-card-bg">
-    <p><%= venue.city %></p>
-  </div>
-  <div class="venue-card-bg venue-card-ratings">
-    <p>MEAT <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
-    <p>CRUMB <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
-    <p>TOPPING <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
-    <p>SIDES <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
-    <p>VENUE <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
-  </div>
-  <div class="venue-card-bg">
-    <p><strong><i class="fa-regular fa-star"></i><%= venue.rating_average %></strong></p>
-    <p><%= venue.name %></p>
-  </div>
-  <button class="venue-card-bg">SUMBIT RATING</button>
+    <div class="venue-card venue-card-title">
+      <h4><%= venue.name %></h4>
+    </div>
+    <div class="venue-card">
+      <p><%= venue.city %></p>
+    </div>
+    <div class="venue-card venue-card-ratings">
+      <p>MEAT <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
+      <p>CRUMB <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
+      <p>TOPPING <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
+      <p>SIDES <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
+      <p>VENUE <i class="fa-regular fa-star"></i><%= venue.rating_average %></p>
+    </div>
+    <div class="venue-card-ratings-total">
+      <p><strong><i class="fa-regular fa-star"></i><%= venue.rating_average %></strong></p>
+    </div>
+    <button class="venue-card venue-card-button"><h4>Submit Rating</h4></button>
 </div>
