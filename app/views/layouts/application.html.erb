@@ -9,6 +9,10 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <%= yield %>
+    <div class="container">
+      <%= render "shared/navbar" unless current_page?(root_path) %>
+      <%= yield %>
+      <%= render "shared/footer" unless current_page?(root_path) %>
+    </div>
   </body>
 </html>

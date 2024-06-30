@@ -2,13 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
 }
 
 #gmaps {
   width: 100%;
-  height: 60vh;
+  height: 80vh;
   margin: 2rem;
-  border: solid 1rem white;
+  border: solid 1rem rgba(132, 169, 140, 0.2);
+  box-shadow: 3px 3px 3px rgba(47, 62, 70, 0.3), -3px 3px 3px rgba(47, 62, 70, 0.3);
 }
 
 .gmaps-marker {
@@ -22,46 +24,35 @@
 .carousel {
   flex: 1 0 auto;
   margin: 2rem 0 0 2rem;
-  width: 360px;
+  width: 400px;
   min-height: 575px;
   display: flex;
   align-items: center;
-  height: 100%;
 }
 
 .carousel-inner {
-  position: relative;
   width: 100%;
-  min-height: 100%;
   overflow: hidden;
-  border: 1px solid grey;
+  box-shadow: 3px 3px 3px rgba(47, 62, 70, 0.3), -3px 3px 3px rgba(47, 62, 70, 0.3);
 }
 
 .carousel-item {
-  position: relative;
   display: none;
-  flex: 0 0 100%;
-  width: 100%;
   transition: transform 0.6s ease-in-out;
 }
 
 .carousel-item.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .carousel-control-prev,
 .carousel-control-next {
-  // position: absolute;
-  // top: 0;
-  // bottom: 0;
   width: 15%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #fff;
-  text-align: center;
   opacity: 0.5;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.3s ease;
 }
 
 .carousel-control-prev-icon,
@@ -69,7 +60,6 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: no-repeat 50% / 100% 100%;
 }
 
 .carousel-control-prev-icon {
@@ -86,15 +76,4 @@
   text-decoration: none;
   outline: 0;
   opacity: 0.9;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
 }
