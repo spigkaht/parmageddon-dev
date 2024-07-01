@@ -1,6 +1,5 @@
 // imports
 import { Controller } from "@hotwired/stimulus";
-import { Loader } from "@googlemaps/js-api-loader";
 
 export default class extends Controller {
   // targets: maps div for view
@@ -13,24 +12,21 @@ export default class extends Controller {
   }
 
   connect() {
-    // google maps api loader
-    const loader = new Loader({
-      apiKey: this.apiKeyValue,
-      version: "weekly",
-      region: "AU",
-      libraries: ["places"]
-    });
+    let map;
+    // url for chicken marker
+    const markerURL = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg";
 
-    loader
-      .importLibrary('maps')
-      .then(({ Map }) => {
+    const initMap = async () => {
+      try {
+        // initialise gmaps import libraries
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        const { Geocoder } = await google.maps.importLibrary("geocoding");
+
         // geocoder variable (used multiple times)
-        const geocoder = new google.maps.Geocoder();
-        console.log("geocoder: ", geocoder)
+        const geocoder = new Geocoder();
         // empty latngnbounds object for gmaps api
         const bounds = new google.maps.LatLngBounds();
-        // url for chicken marker
-        const markerURL = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg";
 
         // sets icon for gmaps api
         const icon = {
@@ -43,62 +39,85 @@ export default class extends Controller {
         // sets options for gmaps api map instance
         const mapOptions = {
           zoom: 11,
-          disableDefaultUI: true
+          disableDefaultUI: true,
+          mapId: "8920b6736ae8305a"
         };
 
         // create map, div for placement, options
         const map = new Map(this.mapDivTarget, mapOptions);
-        console.log(this.locationValue);
+
         // geocode location (parameter/postcode), set map center, output error if no results
-        geocoder.geocode({ address: this.locationValue }).then((response) => {
-          if (response.results[0]) {
-            map.setCenter(response.results[0].geometry.location);
-          } else {
-            window.alert("No results for venue found");
-          }
-        }).catch((e) => {
-          console.log("address: ", this.locationValue);
-          window.alert("Geocoding error for location: " + e.message);
-        })
+        const locationResponse = await geocoder.geocode({ address: this.locationValue });
+        if (locationResponse.results[0]) {
+          map.setCenter(locationResponse.results[0].geometry.location);
+        } else {
+          window.alert("No results for postcode found");
+        }
 
         // geocode each instance of @venues
-        const geocodePromises = this.venuesValue.map(venue => {
+        for (const venue of this.venuesValue) {
           // build address
           const address = `${venue.street}, ${venue.city}, ${venue.state}, ${venue.postcode}`;
-          // geocode address, return response to 'geocodePromises' for catch
-          return geocoder.geocode({ address: address }).then((response) => {
+
+          // geocode address
+          const venueResponse = await geocoder.geocode({ address: address });
             // only if results exist
-            if (response.results[0]) {
+            if (venueResponse.results[0]) {
               // marker options for creating marker for each venue
-              const markerOptions = {
-                label: {
-                  text: venue.name,
-                  className: "gmaps-marker",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                  fontFamily: "Roboto"
-                },
-                position: response.results[0].geometry.location,
-                icon: icon,
-                map: map
+              const position = venueResponse.results[0].geometry.location;
+              const marker = new AdvancedMarkerElement({
+                map: map,
+                position: position,
+                icon: icon
+              });
+
+              // Create custom label element
+              const label = document.createElement('div');
+              label.className = 'gmaps-marker';
+              label.style.position = 'absolute';
+              label.style.transform = 'translate(-50%, -100%)';
+              label.style.whiteSpace = 'nowrap';
+              label.style.fontSize = '16px';
+              label.style.fontWeight = '700';
+              label.style.fontFamily = 'Roboto';
+              label.innerText = venue.name;
+
+              // Append label to map
+              map.getDiv().appendChild(label);
+
+              // Update label position
+              const updateLabelPosition = () => {
+                const projection = map.getProjection();
+                const positionPoint = projection.fromLatLngToPoint(marker.position);
+                const scale = Math.pow(2, map.getZoom());
+                const worldCoordinate = new google.maps.Point(
+                  positionPoint.x * scale,
+                  positionPoint.y * scale
+                );
+                label.style.left = `${worldCoordinate.x}px`;
+                label.style.top = `${worldCoordinate.y}px`;
               };
-              // create marker, place on map
-              const marker = new google.maps.Marker(markerOptions);
+
+              // Listen for map events to update label position
+              google.maps.event.addListener(map, 'bounds_changed', updateLabelPosition);
+              google.maps.event.addListener(map, 'zoom_changed', updateLabelPosition);
+
+              // Initial update for label position
+              updateLabelPosition();
+
               // extend maps boundary
-              bounds.extend(marker.getPosition());
+              bounds.extend(marker.position);
             } else {
               window.alert("No results for venue found");
             }
-          });
-        });
+          }
+        map.fitBounds(bounds);
+      } catch (error) {
+        console.log("Geocoding error: ", error.message);
+        window.alert("Geocoding error: " + error.message);
+      }
+    };
 
-        // catch all marker promises, fit map around markers. else error
-        Promise.all(geocodePromises)
-          .then(() => {
-            map.fitBounds(bounds);
-          })
-          .catch((e) => window.alert("Error geocoding due to " + e));
-      })
-      .catch((e) => { console.log("Error loading maps due to ", e) });
+    initMap();
   }
 }
