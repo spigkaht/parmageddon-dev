@@ -8,7 +8,7 @@
         <%= No venues found! %>
       <% else %>
         <% @venues.each do |venue| %>
-          <div class="carousel-item" data-carousel-target="card">
+          <div class="carousel-item" data-venue-title="<%= venue.name %>" data-carousel-target="card">
             <%= render "pages/card", :venue => venue %>
           </div>
         <% end %>
