@@ -19,9 +19,15 @@
   border: 2px solid rgb(34, 34, 34);
   border-radius: 10px;
   padding: 5px;
-  position: absolute; /* Ensure absolute positioning */
-  transform: translate(-50%, -100%); /* Center the label above the marker */
-  white-space: nowrap; /* Prevent text from wrapping */
+  position: absolute;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+}
+
+.markerImage {
+  &:hover {
+    opacity: 0.5;
+  }
 }
 
 .carousel {

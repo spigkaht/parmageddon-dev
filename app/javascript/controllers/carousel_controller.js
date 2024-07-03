@@ -1,27 +1,48 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="carousel"
 export default class extends Controller {
-  static targets = [ "card" ]
+  static targets = ["card"];
 
   connect() {
-    this.currentIndex = 0;
-    this.showSlide(this.currentIndex);
+    this.currentCardIndex = 0;
+
+    document.addEventListener("gmaps:connected", this.onGmapsConnected.bind(this));
   }
 
-  showSlide(index) {
-    this.cardTargets.forEach((item, i) => {
-      item.classList.toggle('active', i === index);
-    });
-  }
-
-  prev() {
-    this.currentIndex = (this.currentIndex - 1 + this.cardTargets.length) % this.cardTargets.length;
-    this.showSlide(this.currentIndex);
+  onGmapsConnected(event) {
+    const gmapsController = event.detail.controller;
+    if (gmapsController) {
+      this.gmapsController = gmapsController;
+      this.updateMapForCurrentCard();
+    } else {
+      console.error("gmaps controller not found.");
+    }
   }
 
   next() {
-    this.currentIndex = (this.currentIndex + 1) % this.cardTargets.length;
-    this.showSlide(this.currentIndex);
+    this.showCard(this.currentCardIndex + 1);
+  }
+
+  prev() {
+    this.showCard(this.currentCardIndex - 1);
+  }
+
+  showCard(index) {
+    const totalCards = this.cardTargets.length;
+    this.currentCardIndex = (index + totalCards) % totalCards;
+    this.cardTargets.forEach((card, idx) => {
+      card.classList.toggle("active", idx === this.currentCardIndex);
+    });
+    this.updateMapForCurrentCard();
+  }
+
+  updateMapForCurrentCard() {
+    if (this.gmapsController) {
+      const activeCard = this.cardTargets[this.currentCardIndex];
+      const venueTitle = activeCard.dataset.venueTitle;
+      this.gmapsController.clickMarker(venueTitle);
+    } else {
+      console.error("gmaps controller not available.");
+    }
   }
 }
