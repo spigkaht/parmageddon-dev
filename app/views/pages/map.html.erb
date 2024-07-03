@@ -1,4 +1,8 @@
-<div class="map-page-container">
+<div class="map-page-container"
+    data-controller="gmaps"
+    data-gmaps-api-key-value="<%= ENV['GMAPS_API_KEY'] %>"
+    data-gmaps-venues-value="<%= @venues.to_json %>"
+    data-gmaps-location-value="<%= params[:postcode] %>">
   <div id="carouselControls" class="carousel" data-controller="carousel">
     <a class="carousel-control-prev" href="#" role="button" id="carouselBtnPrev" data-action="click->carousel#prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -7,8 +11,10 @@
       <% if @venues.nil? %>
         <%= No venues found! %>
       <% else %>
-        <% @venues.each do |venue| %>
-          <div class="carousel-item" data-venue-title="<%= venue.name %>" data-carousel-target="card">
+        <% @venues.each_with_index do |venue, index| %>
+          <div class="carousel-item <%= 'active' if index == 0 %>"
+            data-venue-title="<%= venue.name.strip %>"
+            data-carousel-target="card">
             <%= render "pages/card", :venue => venue %>
           </div>
         <% end %>
@@ -18,10 +24,6 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
     </a>
   </div>
-  <div id="gmaps" data-controller="gmaps"
-    data-gmaps-api-key-value="<%= ENV['GMAPS_API_KEY'] %>"
-    data-gmaps-venues-value="<%= @venues.to_json %>"
-    data-gmaps-location-value="<%= params[:postcode] %>"
-    data-gmaps-target="mapDiv">
+  <div id="gmaps" data-gmaps-target="mapDiv">
   </div>
 </div>
