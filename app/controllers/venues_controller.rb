@@ -26,7 +26,7 @@ class VenuesController < ApplicationController
     postcode = params[:postcode]
     radius = params[:radius] || "5000"
     type = params[:type] || "bar"
-    api_key = ENV['GOOGLE_MAPS_API_KEY']
+    api_key = ENV.fetch('GOOGLE_MAPS_API_KEY')
 
     # gecode postcode to retrieve latitude and longitude
     geocode_uri = URI("https://maps.googleapis.com/maps/api/geocode/json?address=#{postcode}&key=#{api_key}")
@@ -41,21 +41,6 @@ class VenuesController < ApplicationController
       places_uri = URI("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=#{latitude},#{longitude}&radius=#{radius}&type=#{type}&key=#{api_key}")
       places_response = Net::HTTP.get(places_uri)
       @places_results = JSON.parse(places_response)["results"]
-
-      # create venue instances
-      # @places_results.each do |place|
-      #   Venue.create(
-      #     name: place["name"],
-      #     street: place["vicinity"].split(",")[0],
-      #     city: place["vicinity"].split(",")[1],
-      #     state: geocode_results.first["address_components"][3]["long_name"],
-      #     zip: geocode_results.first["address_components"][0]["long_name"],
-      #     latitude: place["geometry"]["location"]["lat"],
-      #     longitude: place["geometry"]["location"]["lng"],
-      #     rating_average: 0.0,
-      #     price_average: 0.0
-      #   )
-      # end
 
       @venues = Venue.all
       # render map view

@@ -13,7 +13,7 @@ export default class extends Controller {
     const gmapsController = event.detail.controller;
     if (gmapsController) {
       this.gmapsController = gmapsController;
-      this.updateMapForCurrentCard();
+      // this.updateMapForCurrentCard();
     } else {
       console.error("gmaps controller not found.");
     }

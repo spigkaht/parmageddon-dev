@@ -2,7 +2,7 @@ class CreateVenuesByPlaces
   def self.create_venues(venues_data, postcode)
     venues_data.map do |venue|
       Venue.find_by(name: venue["name"]) ||
-        Venue.new(
+        Venue.create(
           name: venue["name"],
           street: venue["vicinity"].split(',')[0],
           city: venue["vicinity"].split(',')[1],

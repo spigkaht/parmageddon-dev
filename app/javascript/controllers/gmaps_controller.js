@@ -20,7 +20,7 @@ export default class extends Controller {
   async initMap() {
     try {
       const { Map } = await google.maps.importLibrary("maps");
-      const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+      const { AdvancedMarkerElement, PinElement, InfoWindow } = await google.maps.importLibrary("marker");
       const { Geocoder } = await google.maps.importLibrary("geocoding");
 
       const geocoder = new Geocoder();
@@ -42,6 +42,7 @@ export default class extends Controller {
       }
 
       this.markers = {};
+      this.currentInfoWindow = null; // Keep track of the currently open InfoWindow
 
       for (const venue of this.venuesValue) {
         const address = `${venue.street}, ${venue.city}, ${venue.state}, ${venue.postcode}`;
@@ -54,6 +55,16 @@ export default class extends Controller {
           markerImg.style.width = "50px";
           markerImg.style.height = "50px";
           markerImg.className = "markerImage";
+          const contentString =
+          `<div class="infoWindow">
+          <p>${venue.name}</p>
+          <i class="fa-regular fa-star"></i>
+          <p>${venue.rating_average}</p>
+          </div>`;
+
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+          });
 
           const marker = new AdvancedMarkerElement({
             map: this.map,
@@ -66,14 +77,33 @@ export default class extends Controller {
           this.markers[venue.name] = marker;
 
           marker.addListener("click", () => {
-            this.map.setZoom(15);
+            this.map.setZoom(18);
             this.map.setCenter(marker.position);
 
-            document.querySelector(".active").classList.toggle("active");
+            if (this.currentInfoWindow) {
+              this.currentInfoWindow.close(); // Close the currently open InfoWindow
+            }
+
+            infowindow.open({
+              anchor: marker,
+              map: this.map,
+            });
+
+            this.currentInfoWindow = infowindow; // Update the reference to the currently open InfoWindow
+
+            const activeElement = document.querySelector(".active");
+            if (activeElement) {
+              activeElement.classList.remove("active");
+            }
             const venueDiv = document.querySelector(`[data-venue-title="${venue.name}"]`);
             if (venueDiv) {
-              venueDiv.classList.toggle("active"); // Toggle the class "highlight"
+              venueDiv.classList.add("active"); // Add the class "active"
             }
+
+            // Add a listener for the 'closeclick' event to reset the zoom level
+            infowindow.addListener("closeclick", () => {
+              this.map.setZoom(15);
+            });
           });
 
           bounds.extend(marker.position);
