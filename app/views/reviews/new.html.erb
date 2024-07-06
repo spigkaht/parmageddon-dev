@@ -1,0 +1,12 @@
+<div class="reviews-container">
+  <%= simple_form_for [@venue, @review] do |f| %>
+    <%= f.input :chicken_rating %>
+    <%= f.input :crumb_rating %>
+    <%= f.input :topping_rating %>
+    <%= f.input :sides_rating %>
+    <%= f.input :venue_rating %>
+    <%= f.input :total_rating %>
+    <%= f.input :comment %>
+    <%= f.submit "Submit review"%>
+  <% end %>
+</div>

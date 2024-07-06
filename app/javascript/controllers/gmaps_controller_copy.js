@@ -1,11 +1,7 @@
-// imports
 import { Controller } from "@hotwired/stimulus";
-// import { Loader } from "@googlemaps/js-api-loader";
 
 export default class extends Controller {
-  // targets: maps div for view
-  static targets = [ "mapDiv" ];
-  // values: gmaps api key, location (params/postcode), venues (list of venues from db)
+  static targets = ["mapDiv"];
   static values = {
     apiKey: String,
     location: String,
@@ -13,87 +9,121 @@ export default class extends Controller {
   }
 
   connect() {
-    let map;
-    // url for chicken marker
-    const markerURL = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg";
+    this.initMap().then(() => {
+      const event = new CustomEvent("gmaps:connected", { detail: { controller: this } });
+      document.dispatchEvent(event);
+    }).catch(error => {
+      console.log("Error initializing map: ", error);
+    });
+  }
 
-    const initMap = async () => {
-      // initialise gmaps import libraries
+  async initMap() {
+    try {
       const { Map } = await google.maps.importLibrary("maps");
-      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      const { AdvancedMarkerElement, PinElement, InfoWindow } = await google.maps.importLibrary("marker");
       const { Geocoder } = await google.maps.importLibrary("geocoding");
 
-      // geocoder variable (used multiple times)
       const geocoder = new Geocoder();
-      // empty latngnbounds object for gmaps api
       const bounds = new google.maps.LatLngBounds();
 
-      // sets icon for gmaps api
-      const icon = {
-        url: markerURL,
-        scaledSize: new google.maps.Size(50, 50), // Scale the SVG
-        anchor: new google.maps.Point(25, 50), // Anchor point of the marker (center bottom)
-        labelOrigin: new google.maps.Point(25, -15)
-      };
-
-      // sets options for gmaps api map instance
       const mapOptions = {
         zoom: 11,
         disableDefaultUI: true,
         mapId: "8920b6736ae8305a"
       };
 
-      // create map, div for placement, options
-      const map = new Map(this.mapDivTarget, mapOptions);
+      this.map = new Map(this.mapDivTarget, mapOptions);
 
-      // geocode location (parameter/postcode), set map center, output error if no results
-      geocoder.geocode({ address: this.locationValue }).then((response) => {
-        if (response.results[0]) {
-          map.setCenter(response.results[0].geometry.location);
-        } else {
-          window.alert("No results for postcode found");
-        }
-      }).catch((e) => {
-        console.log("address: ", this.locationValue);
-        window.alert("Geocoding error for location: " + e.message);
-      })
+      const locationResponse = await geocoder.geocode({ address: this.locationValue });
+      if (locationResponse.results[0]) {
+        this.map.setCenter(locationResponse.results[0].geometry.location);
+      } else {
+        window.alert("No results for postcode found");
+      }
 
-      // geocode each instance of @venues
-      const geocodePromises = this.venuesValue.map(venue => {
-        // build address
+      this.markers = {};
+      this.currentInfoWindow = null; // Keep track of the currently open InfoWindow
+
+      for (const venue of this.venuesValue) {
         const address = `${venue.street}, ${venue.city}, ${venue.state}, ${venue.postcode}`;
+        const venueResponse = await geocoder.geocode({ address: address });
 
-        // geocode address, return response to 'geocodePromises' for catch
-        return geocoder.geocode({ address: address }).then((response) => {
-          // only if results exist
-          if (response.results[0]) {
-            // marker options for creating marker for each venue
-            const markerOptions = {
-              label: {
-                text: venue.name,
-                className: "gmaps-marker",
-                fontSize: "16px",
-                fontWeight: "700",
-                fontFamily: "Roboto"
-              },
-              position: response.results[0].geometry.location,
-              icon: icon,
-              map: map
-            };
-            // create marker, place on map
-            const marker = new AdvancedMarkerElement({
-              map: map,
-              options: markerOptions
+        if (venueResponse.results[0]) {
+          const position = venueResponse.results[0].geometry.location;
+          const markerImg = document.createElement("img");
+          markerImg.src = "https://res.cloudinary.com/dp0apr6y4/image/upload/v1718612885/chicken-marker_rivnug.svg";
+          markerImg.style.width = "50px";
+          markerImg.style.height = "50px";
+          markerImg.className = "markerImage";
+          const contentString =
+          `<div class="infoWindow">
+          <p>${venue.name}</p>
+          <i class="fa-regular fa-star"></i>
+          <p>${venue.rating_average}</p>
+          </div>`;
+
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+          });
+
+          const marker = new AdvancedMarkerElement({
+            map: this.map,
+            position: position,
+            content: markerImg,
+            title: venue.name,
+            gmpClickable: true
+          });
+
+          this.markers[venue.name] = marker;
+
+          marker.addListener("click", () => {
+            this.map.setZoom(18);
+            this.map.setCenter(marker.position);
+
+            if (this.currentInfoWindow) {
+              this.currentInfoWindow.close(); // Close the currently open InfoWindow
+            }
+
+            infowindow.open({
+              anchor: marker,
+              map: this.map,
             });
 
-              // extend maps boundary
-            bounds.extend(marker.getPosition());
-          } else {
-            window.alert("No results for venue found");
-          };
-        });
-      });
-      map.fitBounds(bounds);
-    };
-  };
-};
+            this.currentInfoWindow = infowindow; // Update the reference to the currently open InfoWindow
+
+            const activeElement = document.querySelector(".active");
+            if (activeElement) {
+              activeElement.classList.remove("active");
+            }
+            const venueDiv = document.querySelector(`[data-venue-title="${venue.name}"]`);
+            if (venueDiv) {
+              venueDiv.classList.add("active"); // Add the class "active"
+            }
+
+            // Add a listener for the 'closeclick' event to reset the zoom level
+            infowindow.addListener("closeclick", () => {
+              this.map.setZoom(15);
+            });
+          });
+
+          bounds.extend(marker.position);
+        } else {
+          window.alert("No results for venue found");
+        }
+      }
+      this.map.fitBounds(bounds);
+    } catch (error) {
+      console.log("Geocoding error: ", error.message);
+      window.alert("Geocoding error: " + error.message);
+    }
+  }
+
+  clickMarker(venueName) {
+    const marker = this.markers[venueName];
+    if (marker) {
+      google.maps.event.trigger(marker, "click");
+    } else {
+      console.log(`Marker for venue "${venueName}" not found.`);
+    }
+  }
+}

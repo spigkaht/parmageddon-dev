@@ -30,6 +30,21 @@
   }
 }
 
+.infoWindow {
+  display: flex;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 15px 5px 5px 0;
+
+  * {
+    margin: 0 5px;
+  }
+}
+
+.gm-style .gm-style-iw-c {
+  flex-direction: row;
+}
+
 .carousel {
   flex: 1 0 auto;
   margin: 2rem 0 0 2rem;

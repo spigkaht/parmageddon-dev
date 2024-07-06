@@ -10,13 +10,13 @@ Rails.application.routes.draw do
   root to: "pages#index"
 
   resources :venues, only: [:show, :new, :create, :edit, :update, :destroy] do
-    resources :parmas, only: [:show, :new, :create, :edit, :update, :destroy] do
-      resources :reviews, only: [:new, :create, :edit, :update, :destroy]
-    end
+    resources :reviews, only: [:new, :create, :edit, :update, :destroy]
   end
 
-  resources :parmas, only: [:index]
-  resources :polls, only: [:index, :new, :create]
+# resources :parmas, only: [:show, :new, :create, :edit, :update, :destroy]
+
+resources :parmas, only: [:index]
+resources :polls, only: [:index, :new, :create]
   get "/map", to: "pages#map", as: "map"
   post "/map", to: "pages#search"
   get "reset_session_map", to: "pages#reset_session_map"

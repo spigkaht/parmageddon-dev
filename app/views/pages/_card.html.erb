@@ -15,5 +15,6 @@
     <div class="venue-card-ratings-total">
       <p><strong><i class="fa-regular fa-star"></i><%= venue.rating_average %></strong></p>
     </div>
-    <button class="venue-card venue-card-button"><h4>Submit Rating</h4></button>
+    <h4><%= link_to "Submit Rating", new_venue_review_path(venue.id, @review), class: "venue-card venue-card-button review-submit-button" %></h4>
+    <button class="venue-card venue-card-button"><h4>View Venue</h4></button>
 </div>
